@@ -1,14 +1,19 @@
 fileFormatVersion: 2
-guid: c3438f7e37f114cc3bba99e3f09ffc5d
+guid: ba83df34b5eb14efabefeb2641c6f2c6
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
+    100002: connector_to_middle_room_interior
     400000: //RootNode
+    400002: connector_to_middle_room_interior
     2100000: lambert1
     2300000: //RootNode
+    2300002: connector_to_middle_room_interior
     3300000: //RootNode
-    4300000: Connector
+    3300002: connector_to_middle_room_interior
+    4300000: connector_to_middle_room_exterior
+    4300002: connector_to_middle_room_interior
   externalObjects: {}
   materials:
     importMaterials: 1

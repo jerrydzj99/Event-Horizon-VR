@@ -3,17 +3,17 @@ guid: 2f24920467da9450f965ff925dc26306
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: connector_tp_ring_interior
-    400000: //RootNode
-    400002: connector_tp_ring_interior
+    100000: connector_to_engine_interior
+    100002: //RootNode
+    400000: connector_to_engine_interior
+    400002: //RootNode
     2100000: lambert1
-    2300000: //RootNode
-    2300002: connector_tp_ring_interior
-    3300000: //RootNode
-    3300002: connector_tp_ring_interior
-    4300000: connector_to_ring_exterior1
-    4300002: connector_tp_ring_interior
+    2300000: connector_to_engine_interior
+    2300002: //RootNode
+    3300000: connector_to_engine_interior
+    3300002: //RootNode
+    4300000: connector_to_ring1
+    4300002: connector_to_engine_interior
   externalObjects: {}
   materials:
     importMaterials: 1

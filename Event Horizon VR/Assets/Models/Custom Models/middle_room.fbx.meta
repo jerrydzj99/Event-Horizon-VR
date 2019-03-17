@@ -1,21 +1,19 @@
 fileFormatVersion: 2
-guid: 5fe9186c6d25e9c45ba16e72705db044
+guid: fb01d58f7a71f4c24ba4376f01dbffcf
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: pTorus1
-    100004: pTorus2
+    100002: middle_room_interior
     400000: //RootNode
-    400002: pTorus1
-    400004: pTorus2
+    400002: middle_room_interior
     2100000: lambert1
-    2300000: pTorus1
-    2300002: pTorus2
-    3300000: pTorus1
-    3300002: pTorus2
-    4300000: pTorus1
-    4300002: pTorus2
+    2300000: //RootNode
+    2300002: middle_room_interior
+    3300000: //RootNode
+    3300002: middle_room_interior
+    4300000: middle_room_exterior
+    4300002: middle_room_interior
   externalObjects: {}
   materials:
     importMaterials: 1
