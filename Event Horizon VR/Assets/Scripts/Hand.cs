@@ -7,6 +7,7 @@ public class Hand : MonoBehaviour
 
     public OVRInput.Controller controller;
     public GameObject player;
+    public GameObject handModel;
 
     private float gripState;
     private bool anchored;
@@ -29,9 +30,10 @@ public class Hand : MonoBehaviour
         if (anchored)
         {
 
-            Vector3 displacement = transform.position - anchorPosition;
             transform.position = anchorPosition;
-            player.transform.position = player.transform.position - displacement;
+            handModel.transform.position = anchorPosition;
+            Rigidbody rigidbody = player.GetComponent<Rigidbody>();
+            rigidbody.velocity = -handVelocity / 2f;
 
             if (gripState <= 0.9f)
             {
@@ -57,12 +59,13 @@ public class Hand : MonoBehaviour
     {
         anchored = true;
         anchorPosition = transform.position;
+        OVRInput.SetControllerVibration(1f, 1f, controller);
     }
 
     private void Release()
     {
         anchored = false;
         Rigidbody rigidbody = player.GetComponent<Rigidbody>();
-        rigidbody.velocity = -handVelocity;
+        rigidbody.velocity = - handVelocity / 2f;
     }
 }
