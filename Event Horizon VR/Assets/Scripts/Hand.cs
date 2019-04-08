@@ -13,11 +13,14 @@ public class Hand : MonoBehaviour
     private bool anchored;
     private Vector3 anchorPosition;
     private Vector3 handVelocity;
+    private float timeOfAnchoring;
+    private bool anchorVibrating;
 
     // Use this for initialization
     void Start()
     {
         anchored = false;
+        anchorVibrating = false;
     }
 
     // Update is called once per frame
@@ -29,11 +32,25 @@ public class Hand : MonoBehaviour
 
         if (anchored)
         {
-
-            transform.position = anchorPosition;
+            
+            //transform.position = anchorPosition;
             handModel.transform.position = anchorPosition;
             Rigidbody rigidbody = player.GetComponent<Rigidbody>();
-            rigidbody.velocity = -handVelocity / 2f;
+            rigidbody.velocity = - handVelocity / 2.5f;
+
+            if (Time.time - timeOfAnchoring > 0.1f)
+            {
+                EndAnchorVibration();
+            }
+
+            if (Vector3.Magnitude(handModel.transform.position - transform.position) > 0.02f)
+            {
+                OVRInput.SetControllerVibration(0.0001f, 1f, controller);
+            }
+            else if (!anchorVibrating)
+            {
+                OVRInput.SetControllerVibration(0, 0, controller);
+            }
 
             if (gripState <= 0.9f)
             {
@@ -59,13 +76,28 @@ public class Hand : MonoBehaviour
     {
         anchored = true;
         anchorPosition = transform.position;
-        OVRInput.SetControllerVibration(1f, 1f, controller);
+        StartAnchorVibration();
     }
 
     private void Release()
     {
         anchored = false;
         Rigidbody rigidbody = player.GetComponent<Rigidbody>();
-        rigidbody.velocity = - handVelocity / 2f;
+        rigidbody.velocity = - handVelocity / 2.5f;
+        EndAnchorVibration();
     }
+
+    private void StartAnchorVibration()
+    {
+        anchorVibrating = true;
+        timeOfAnchoring = Time.time;
+        OVRInput.SetControllerVibration(0.5f, 1f, controller);
+    }
+
+    private void EndAnchorVibration()
+    {
+        anchorVibrating = false;
+        OVRInput.SetControllerVibration(0, 0, controller);
+    }
+
 }
