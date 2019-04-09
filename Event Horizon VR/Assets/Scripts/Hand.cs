@@ -10,17 +10,22 @@ public class Hand : MonoBehaviour
     public GameObject handModel;
 
     private float gripState;
+
     private bool anchored;
     private Vector3 anchorPosition;
     private Vector3 handVelocity;
     private float timeOfAnchoring;
     private bool anchorVibrating;
 
+    private bool holdingObject;
+    private GameObject grabbedObject;
+
     // Use this for initialization
     void Start()
     {
         anchored = false;
         anchorVibrating = false;
+        holdingObject = false;
     }
 
     // Update is called once per frame
@@ -32,18 +37,17 @@ public class Hand : MonoBehaviour
 
         if (anchored)
         {
-            
             //transform.position = anchorPosition;
             handModel.transform.position = anchorPosition;
             Rigidbody rigidbody = player.GetComponent<Rigidbody>();
-            rigidbody.velocity = - handVelocity / 2.5f;
+            rigidbody.velocity = -handVelocity / 2.5f;
 
             if (Time.time - timeOfAnchoring > 0.1f)
             {
-                EndAnchorVibration();
+                EndTouchVibration();
             }
 
-            if (Vector3.Magnitude(handModel.transform.position - transform.position) > 0.02f)
+            if (Vector3.Magnitude(handModel.transform.position - transform.position) > 0.05f)
             {
                 OVRInput.SetControllerVibration(0.0001f, 1f, controller);
             }
@@ -54,50 +58,124 @@ public class Hand : MonoBehaviour
 
             if (gripState <= 0.9f)
             {
-                Release();
+                Disanchor();
+            }
+        }
+
+        if (holdingObject)
+        {
+            if (Time.time - timeOfAnchoring > 0.1f)
+            {
+                EndTouchVibration();
             }
 
+            if (gripState < 0.9f)
+            {
+                Release();
+            }
         }
 
     }
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.CompareTag("Anchor"))
+
+        if (holdingObject)
         {
-            if (!anchored && gripState > 0.9f)
+
+        } else
+        {
+            if (other.gameObject.CompareTag("Grabbable"))
             {
-                Anchor();
+                if (gripState > 0.9f)
+                {
+                    Grab(other.gameObject);
+                }
+            }
+
+            if (other.gameObject.CompareTag("Anchor"))
+            {
+                if (!anchored && gripState > 0.9f)
+                {
+                    Anchor();
+                }
             }
         }
+
     }
 
     private void Anchor()
     {
         anchored = true;
         anchorPosition = transform.position;
-        StartAnchorVibration();
+        StartTouchVibration();
     }
 
-    private void Release()
+    private void Disanchor()
     {
         anchored = false;
         Rigidbody rigidbody = player.GetComponent<Rigidbody>();
         rigidbody.velocity = - handVelocity / 2.5f;
-        EndAnchorVibration();
+        EndTouchVibration();
     }
 
-    private void StartAnchorVibration()
+    private void StartTouchVibration()
     {
         anchorVibrating = true;
         timeOfAnchoring = Time.time;
         OVRInput.SetControllerVibration(0.5f, 1f, controller);
     }
 
-    private void EndAnchorVibration()
+    private void EndTouchVibration()
     {
         anchorVibrating = false;
         OVRInput.SetControllerVibration(0, 0, controller);
+    }
+
+    private void Grab(GameObject obj)
+    {
+        holdingObject = true;
+        grabbedObject = obj;
+        AnchorGrabbedObject();
+
+        Rigidbody rigidbody = grabbedObject.GetComponent<Rigidbody>();
+        SphereCollider collider = grabbedObject.GetComponent<SphereCollider>();
+        rigidbody.isKinematic = true;
+        collider.enabled = false;
+
+        StartTouchVibration();
+    }
+
+    private void Release()
+    {
+        holdingObject = false;
+        Rigidbody rigidbody = grabbedObject.GetComponent<Rigidbody>();
+        SphereCollider collider = grabbedObject.GetComponent<SphereCollider>();
+
+        grabbedObject.transform.parent = null;
+        rigidbody.isKinematic = false;
+        collider.enabled = true;
+        rigidbody.velocity = handVelocity / 2.5f + player.GetComponent<Rigidbody>().velocity;
+
+        grabbedObject = null;
+
+        EndTouchVibration();
+    }
+
+    private void AnchorGrabbedObject()
+    {
+        grabbedObject.transform.parent = transform;
+
+        if (controller == OVRInput.Controller.LTouch)
+        {
+            grabbedObject.transform.localPosition = new Vector3(0.55633f, -0.2084f, 0.32503f);
+            grabbedObject.transform.localEulerAngles = new Vector3(-57.797f, -2.722f, 62.474f);
+        }
+        else
+        {
+            grabbedObject.transform.localPosition = new Vector3(-0.5512f, -0.2478f, 0.31402f);
+            grabbedObject.transform.localEulerAngles = new Vector3(70.927f, 143.893f, 23.954f);
+        }
     }
 
 }
