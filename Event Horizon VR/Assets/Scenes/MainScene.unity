@@ -545,6 +545,7 @@ MonoBehaviour:
   controller: 2
   player: {fileID: 573259191}
   handModel: {fileID: 1176205516}
+  centerEyeAnchor: {fileID: 1636013743}
 --- !u!135 &188461076
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4511,6 +4512,7 @@ MonoBehaviour:
   controller: 1
   player: {fileID: 573259191}
   handModel: {fileID: 1082777332}
+  centerEyeAnchor: {fileID: 1636013743}
 --- !u!135 &1406195631
 SphereCollider:
   m_ObjectHideFlags: 0
