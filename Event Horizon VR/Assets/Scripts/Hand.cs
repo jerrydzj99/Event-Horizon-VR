@@ -9,7 +9,6 @@ public class Hand : MonoBehaviour
     public GameObject player;
     public GameObject handModel;
 	public GameObject centerEyeAnchor;
-    public GameObject boosterSound;
 
     private float gripState;
 
@@ -22,17 +21,12 @@ public class Hand : MonoBehaviour
     private bool holdingObject;
     private GameObject grabbedObject;
 
-	private bool thumbstickPressed;
-	private float timeOfBoosting;
-	private bool boostingFrozen;
-
     // Use this for initialization
     void Start()
     {
         anchored = false;
         anchorVibrating = false;
         holdingObject = false;
-		boostingFrozen = false;
     }
 
     // Update is called once per frame
@@ -41,7 +35,6 @@ public class Hand : MonoBehaviour
 
         gripState = OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger, controller);
         handVelocity = OVRInput.GetLocalControllerVelocity(controller);
-		thumbstickPressed = OVRInput.Get(OVRInput.Button.PrimaryThumbstick) || OVRInput.Get(OVRInput.Button.SecondaryThumbstick);
 
         if (Vector3.Magnitude(player.GetComponent<Rigidbody>().velocity) > 2f)
         {
@@ -87,17 +80,6 @@ public class Hand : MonoBehaviour
                 Release();
             }
         }
-
-		if (!anchored && thumbstickPressed && !boostingFrozen) {
-			boostingFrozen = true;
-			timeOfBoosting = Time.time;
-			player.GetComponent<Rigidbody>().velocity += centerEyeAnchor.transform.forward / Vector3.Magnitude(centerEyeAnchor.transform.forward) * 0.5f;
-            boosterSound.GetComponent<AudioSource>().Play();
-		}
-
-		if (Time.time - timeOfBoosting > 0.5f) {
-			boostingFrozen = false;
-		}
 
     }
 
