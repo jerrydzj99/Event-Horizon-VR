@@ -86,10 +86,7 @@ public class Hand : MonoBehaviour
     void OnTriggerStay(Collider other)
     {
 
-        if (holdingObject)
-        {
-
-        } else
+        if (!holdingObject && !other.isTrigger)
         {
             if (other.gameObject.CompareTag("Grabbable"))
             {
