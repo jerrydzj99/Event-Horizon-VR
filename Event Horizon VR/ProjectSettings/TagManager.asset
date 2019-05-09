@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Anchor
   - Grabbable
+  - OpenEVAButton
+  - CloseEVAButton
+  - OpenSpaceWalkButton
+  - CloseSpaceWalkButton
+  - ConsoleButton
+  - ReferencePoint
   layers:
   - Default
   - TransparentFX
